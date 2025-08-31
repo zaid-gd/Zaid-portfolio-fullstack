@@ -101,6 +101,7 @@ const Hero = ({ data }) => {
               target="_blank" 
               rel="noopener noreferrer"
               className="text-gray-400 hover:text-cyan-400 transition-colors duration-200"
+              aria-label="LinkedIn Profile"
             >
               <Linkedin size={24} />
             </a>
@@ -109,18 +110,39 @@ const Hero = ({ data }) => {
               target="_blank" 
               rel="noopener noreferrer"
               className="text-gray-400 hover:text-cyan-400 transition-colors duration-200"
+              aria-label="GitHub Profile"
             >
               <Github size={24} />
             </a>
             <a 
+              href={data.youtube} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-gray-400 hover:text-cyan-400 transition-colors duration-200"
+              aria-label="YouTube Channel"
+            >
+              <Youtube size={24} />
+            </a>
+            <a 
+              href={data.instagram} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-gray-400 hover:text-cyan-400 transition-colors duration-200"
+              aria-label="Professional Instagram"
+            >
+              <Instagram size={24} />
+            </a>
+            <a 
               href={`mailto:${data.email}`}
               className="text-gray-400 hover:text-cyan-400 transition-colors duration-200"
+              aria-label="Send Email"
             >
               <Mail size={24} />
             </a>
             <a 
               href={`tel:${data.phone}`}
               className="text-gray-400 hover:text-cyan-400 transition-colors duration-200"
+              aria-label="Call Phone"
             >
               <Phone size={24} />
             </a>
