@@ -195,4 +195,4 @@ try {
 } catch (error) {
   console.error('❌ Error preparing portfolio:', error.message);
   process.exit(1);
-}`;
+}
