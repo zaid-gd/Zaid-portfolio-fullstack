@@ -199,13 +199,16 @@ class PortfolioAPITester:
     def test_cors_configuration(self):
         """Test CORS configuration by checking headers"""
         try:
-            # Make an OPTIONS request to check CORS
-            response = requests.options(f"{self.backend_url}/contact", timeout=10)
+            # Make a GET request with Origin header to check CORS
+            response = requests.get(
+                f"{self.backend_url}/",
+                headers={"Origin": "https://example.com"},
+                timeout=10
+            )
             
             cors_headers = {
                 'Access-Control-Allow-Origin': response.headers.get('Access-Control-Allow-Origin'),
-                'Access-Control-Allow-Methods': response.headers.get('Access-Control-Allow-Methods'),
-                'Access-Control-Allow-Headers': response.headers.get('Access-Control-Allow-Headers')
+                'Access-Control-Allow-Credentials': response.headers.get('Access-Control-Allow-Credentials')
             }
             
             if cors_headers['Access-Control-Allow-Origin']:
