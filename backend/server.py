@@ -117,6 +117,36 @@ async def send_contact_email(contact_data: ContactFormRequest):
 async def root():
     return {"message": "Hello World"}
 
+@api_router.post("/contact", response_model=ContactFormResponse)
+async def submit_contact_form(contact_data: ContactFormRequest):
+    """Handle contact form submissions"""
+    try:
+        # Validate input data (Pydantic handles basic validation)
+        logger.info(f"Received contact form submission from: {contact_data.name} ({contact_data.email})")
+        
+        # Send email
+        email_sent = await send_contact_email(contact_data)
+        
+        if email_sent:
+            return ContactFormResponse(
+                success=True,
+                message="Thank you for your message! I'll get back to you soon."
+            )
+        else:
+            raise HTTPException(
+                status_code=500,
+                detail="Failed to send message. Please try again later."
+            )
+            
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error processing contact form: {str(e)}")
+        raise HTTPException(
+            status_code=500,
+            detail="An error occurred while processing your request."
+        )
+
 @api_router.post("/status", response_model=StatusCheck)
 async def create_status_check(input: StatusCheckCreate):
     status_dict = input.dict()
