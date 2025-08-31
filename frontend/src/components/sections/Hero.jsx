@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ChevronDown, Github, Linkedin, Mail, Phone } from 'lucide-react';
+import { ChevronDown, Github, Linkedin, Mail, Phone, Instagram, Youtube } from 'lucide-react';
 import { Button } from '../ui/button';
 
 const Hero = ({ data }) => {
