@@ -24,7 +24,7 @@ const Footer = ({ data }) => {
               </p>
               <div className="flex space-x-4">
                 <a 
-                  href={`https://${data.linkedin}`} 
+                  href={data.linkedin} 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="p-2 bg-slate-800 hover:bg-cyan-400 text-gray-400 hover:text-black rounded-lg transition-all duration-200"
@@ -32,7 +32,7 @@ const Footer = ({ data }) => {
                   <Linkedin size={20} />
                 </a>
                 <a 
-                  href={`https://${data.github}`} 
+                  href={data.github} 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="p-2 bg-slate-800 hover:bg-cyan-400 text-gray-400 hover:text-black rounded-lg transition-all duration-200"
