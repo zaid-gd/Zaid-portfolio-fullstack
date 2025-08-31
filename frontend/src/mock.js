@@ -3,12 +3,15 @@ export const mockData = {
     name: "Zaid Ali Ansari",
     title: "Video Editor & Game Developer",
     subtitle: "Creating Digital Experiences Through Visual Storytelling",
-    email: "Zaid.ansari5127@gmail.com",
+    email: "zaid.ansari5127@gmail.com",
     phone: "+91 9867251592",
     altPhone: "+971 526243982",
     location: "Mumbai, Maharashtra, India",
-    linkedin: "linkedin.com/in/zaid-ali-ansari-47885b381",
-    github: "github.com/zaid-gd"
+    linkedin: "https://www.linkedin.com/in/zaid-ali-ansari-47885b381/",
+    github: "https://github.com/zaid-gd",
+    instagram: "https://www.instagram.com/screen_5127/",
+    personalInstagram: "https://www.instagram.com/zaid.ansari.10/",
+    youtube: "https://www.youtube.com/@GachaScreen"
   },
 
   about: {
