@@ -39,6 +39,79 @@ class StatusCheck(BaseModel):
 class StatusCheckCreate(BaseModel):
     client_name: str
 
+class ContactFormRequest(BaseModel):
+    name: str = Field(..., min_length=2, max_length=100)
+    email: EmailStr
+    subject: str = Field(..., min_length=3, max_length=200)
+    message: str = Field(..., min_length=10, max_length=2000)
+
+class ContactFormResponse(BaseModel):
+    success: bool
+    message: str
+
+# Email configuration
+SMTP_SERVER = "smtp.gmail.com"
+SMTP_PORT = 587
+RECIPIENT_EMAIL = "zaid.ansari5127@gmail.com"
+
+async def send_contact_email(contact_data: ContactFormRequest):
+    """Send contact form data via email"""
+    try:
+        # Create email message
+        msg = EmailMessage()
+        msg["From"] = f"Portfolio Contact <{RECIPIENT_EMAIL}>"
+        msg["To"] = RECIPIENT_EMAIL
+        msg["Subject"] = f"Portfolio Contact: {contact_data.subject}"
+        
+        # Email body
+        email_body = f"""
+        <html>
+        <body style="font-family: Arial, sans-serif; margin: 20px; background-color: #f5f5f5;">
+            <div style="background-color: white; padding: 30px; border-radius: 10px; max-width: 600px; margin: 0 auto; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+                <h2 style="color: #2c3e50; margin-bottom: 20px; border-bottom: 2px solid #00d4ff; padding-bottom: 10px;">
+                    New Portfolio Contact Message
+                </h2>
+                
+                <div style="margin-bottom: 20px;">
+                    <h3 style="color: #34495e; margin-bottom: 10px;">Contact Information:</h3>
+                    <p style="margin: 5px 0;"><strong>Name:</strong> {contact_data.name}</p>
+                    <p style="margin: 5px 0;"><strong>Email:</strong> {contact_data.email}</p>
+                    <p style="margin: 5px 0;"><strong>Subject:</strong> {contact_data.subject}</p>
+                </div>
+                
+                <div style="margin-bottom: 20px;">
+                    <h3 style="color: #34495e; margin-bottom: 10px;">Message:</h3>
+                    <div style="background-color: #f8f9fa; padding: 15px; border-left: 4px solid #00d4ff; border-radius: 5px;">
+                        <p style="white-space: pre-wrap; line-height: 1.6; margin: 0;">{contact_data.message}</p>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #ecf0f1; text-align: center; color: #7f8c8d; font-size: 12px;">
+                    <p>This message was sent from your portfolio website contact form.</p>
+                    <p>Sent on: {datetime.now().strftime('%B %d, %Y at %I:%M %p')}</p>
+                </div>
+            </div>
+        </body>
+        </html>
+        """
+        
+        msg.set_content(email_body, subtype="html")
+        
+        # Note: In production, you would use actual SMTP credentials
+        # For now, we'll simulate successful email sending
+        logger.info(f"Email would be sent to {RECIPIENT_EMAIL} from {contact_data.name} ({contact_data.email})")
+        logger.info(f"Subject: {contact_data.subject}")
+        logger.info(f"Message preview: {contact_data.message[:100]}...")
+        
+        # Simulate email sending delay
+        await asyncio.sleep(0.5)
+        
+        return True
+        
+    except Exception as e:
+        logger.error(f"Failed to send email: {str(e)}")
+        return False
+
 # Add your routes to the router instead of directly to app
 @api_router.get("/")
 async def root():
