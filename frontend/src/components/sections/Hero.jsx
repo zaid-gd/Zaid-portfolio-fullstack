@@ -97,7 +97,7 @@ const Hero = ({ data }) => {
           {/* Social Links */}
           <div className="flex justify-center space-x-6 mb-12">
             <a 
-              href={`https://${data.linkedin}`} 
+              href={data.linkedin} 
               target="_blank" 
               rel="noopener noreferrer"
               className="text-gray-400 hover:text-cyan-400 transition-colors duration-200"
@@ -105,7 +105,7 @@ const Hero = ({ data }) => {
               <Linkedin size={24} />
             </a>
             <a 
-              href={`https://${data.github}`} 
+              href={data.github} 
               target="_blank" 
               rel="noopener noreferrer"
               className="text-gray-400 hover:text-cyan-400 transition-colors duration-200"
