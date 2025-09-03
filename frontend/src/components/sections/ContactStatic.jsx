@@ -7,6 +7,8 @@ import { Label } from '../ui/label';
 import { Mail, Phone, MapPin, Send, CheckCircle, ExternalLink } from 'lucide-react';
 import { useToast } from '../../hooks/use-toast';
 
+const EMAIL_ADDRESS = 'zaid.ansari5127@gmail.com';
+
 const ContactStatic = () => {
   const { toast } = useToast();
   const [formData, setFormData] = useState({
@@ -65,6 +67,16 @@ const ContactStatic = () => {
     return true;
   };
 
+  // Use an anchor click to open mailto, which is more reliable than window.location.href
+  const openMailClient = (mailtoLink) => {
+    const a = document.createElement('a');
+    a.href = mailtoLink;
+    a.style.display = 'none';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     
@@ -73,32 +85,40 @@ const ContactStatic = () => {
     const { name, email, subject, message } = formData;
     
     // Create mailto link with form data
-    const mailtoLink = `mailto:zaid.ansari5127@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(
+    const mailtoLink = `mailto:$zaid.ansari5127@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(
       `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`
     )}`;
-    
-    // Open default email client
-    window.location.href = mailtoLink;
-    
-    toast({
-      title: "Opening Email Client",
-      description: "Your default email application will open with the message pre-filled.",
-      variant: "default",
-    });
-    
-    // Reset form after a delay
-    setTimeout(() => {
-      setFormData({
-        name: '',
-        email: '',
-        subject: '',
-        message: ''
+
+    try {
+      openMailClient(mailtoLink);
+
+      toast({
+        title: "Opening Email Client",
+        description: "Your default email application will open with the message pre-filled.",
+        variant: "default",
       });
-    }, 1000);
+
+      // Reset form after a delay
+      setTimeout(() => {
+        setFormData({
+          name: '',
+          email: '',
+          subject: '',
+          message: ''
+        });
+      }, 1000);
+    } catch (err) {
+      toast({
+        title: "Error",
+        description: "Could not open your email client. Please email directly.",
+        variant: "destructive",
+      });
+    }
   };
 
   const handleDirectEmail = () => {
-    window.location.href = 'mailto:zaid.ansari5127@gmail.com';
+    // Use anchor click for reliability
+    openMailClient(`mailto:$zaid.ansari5127@gmail.com`);
   };
 
   return (
