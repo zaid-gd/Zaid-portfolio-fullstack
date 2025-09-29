@@ -4,7 +4,7 @@ import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Textarea } from '../ui/textarea';
 import { Label } from '../ui/label';
-import { Mail, Phone, MapPin, Send, CheckCircle, AlertCircle } from 'lucide-react';
+import { Mail, Phone, MapPin, Send, CheckCircle, AlertCircle, ExternalLink } from 'lucide-react';
 import { useToast } from '../../hooks/use-toast';
 
 const Contact = () => {
@@ -16,6 +16,7 @@ const Contact = () => {
     message: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [backendError, setBackendError] = useState('');
 
   const handleInputChange = (e) => {
     setFormData({
@@ -72,6 +73,7 @@ const Contact = () => {
     if (!validateForm()) return;
     
     setIsSubmitting(true);
+    setBackendError('');
     
     try {
       const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
@@ -105,6 +107,7 @@ const Contact = () => {
       
     } catch (error) {
       console.error('Contact form error:', error);
+      setBackendError(error.message || 'Failed to send message.');
       toast({
         title: "Error",
         description: error.message || "Failed to send message. Please try again or contact me directly via email.",
@@ -113,6 +116,15 @@ const Contact = () => {
     } finally {
       setIsSubmitting(false);
     }
+  };
+
+  const handleDirectEmail = () => {
+    const a = document.createElement('a');
+    a.href = 'mailto:zaid.ansari5127@gmail.com';
+    a.style.display = 'none';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
   };
 
   return (
@@ -177,7 +189,17 @@ const Contact = () => {
 
               <Card className="bg-slate-800/50 border-cyan-400/20 backdrop-blur-sm">
                 <CardContent className="p-6">
-                  <h3 className="text-xl font-bold text-white mb-4">Response Time</h3>
+                  <h3 className="text-xl font-bold text-white mb-4">Quick Contact</h3>
+                  <button
+                    type="button"
+                    onClick={handleDirectEmail}
+                    className="w-full bg-gradient-to-r from-cyan-400 to-green-400 text-black hover:from-cyan-300 hover:to-green-300 font-semibold mb-3 rounded-md py-2"
+                  >
+                    <div className="flex items-center justify-center">
+                      <ExternalLink className="w-4 h-4 mr-2" />
+                      Email me directly
+                    </div>
+                  </button>
                   <div className="flex items-center space-x-2 text-green-400">
                     <CheckCircle className="w-4 h-4" />
                     <span className="text-sm">Usually responds within 24 hours</span>
@@ -264,6 +286,13 @@ const Contact = () => {
                         </div>
                       )}
                     </Button>
+
+                    {backendError && (
+                      <div className="flex items-center text-red-400 text-sm">
+                        <AlertCircle className="w-4 h-4 mr-2" />
+                        <span>{backendError}</span>
+                      </div>
+                    )}
                   </form>
                 </CardContent>
               </Card>

@@ -50,19 +50,23 @@ class ContactFormResponse(BaseModel):
     message: str
 
 # Email configuration
-SMTP_SERVER = "smtp.gmail.com"
-SMTP_PORT = 587
-RECIPIENT_EMAIL = "zaid.ansari5127@gmail.com"
+SMTP_SERVER = os.environ.get("SMTP_SERVER", "smtp.gmail.com")
+SMTP_PORT = int(os.environ.get("SMTP_PORT", "587"))
+SMTP_USERNAME = os.environ.get("SMTP_USERNAME")
+SMTP_PASSWORD = os.environ.get("SMTP_PASSWORD")
+SMTP_USE_TLS = os.environ.get("SMTP_USE_TLS", "true").lower() == "true"
+RECIPIENT_EMAIL = os.environ.get("RECIPIENT_EMAIL", "zaid.ansari5127@gmail.com")
 
 async def send_contact_email(contact_data: ContactFormRequest):
     """Send contact form data via email"""
     try:
         # Create email message
         msg = EmailMessage()
-        msg["From"] = f"Portfolio Contact <{RECIPIENT_EMAIL}>"
+        sender_address = SMTP_USERNAME or RECIPIENT_EMAIL
+        msg["From"] = f"Portfolio Contact <{sender_address}>"
         msg["To"] = RECIPIENT_EMAIL
         msg["Subject"] = f"Portfolio Contact: {contact_data.subject}"
-        
+
         # Email body
         email_body = f"""
         <html>
@@ -94,18 +98,20 @@ async def send_contact_email(contact_data: ContactFormRequest):
         </body>
         </html>
         """
-        
         msg.set_content(email_body, subtype="html")
-        
-        # Note: In production, you would use actual SMTP credentials
-        # For now, we'll simulate successful email sending
-        logger.info(f"Email would be sent to {RECIPIENT_EMAIL} from {contact_data.name} ({contact_data.email})")
-        logger.info(f"Subject: {contact_data.subject}")
-        logger.info(f"Message preview: {contact_data.message[:100]}...")
-        
-        # Simulate email sending delay
-        await asyncio.sleep(0.5)
-        
+
+        # Actually send the email via SMTP
+        smtp = aiosmtplib.SMTP(hostname=SMTP_SERVER, port=SMTP_PORT, start_tls=SMTP_USE_TLS, timeout=20)
+        await smtp.connect()
+        # Some servers require explicit STARTTLS after connect
+        if SMTP_USE_TLS and not smtp.is_tls:
+            await smtp.starttls()
+        if SMTP_USERNAME and SMTP_PASSWORD:
+            await smtp.login(SMTP_USERNAME, SMTP_PASSWORD)
+        await smtp.send_message(msg)
+        await smtp.quit()
+
+        logger.info("Contact email sent successfully")
         return True
         
     except Exception as e:
