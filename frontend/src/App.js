@@ -12,6 +12,7 @@ function App() {
           <Route path="/" element={<Portfolio />} />
         </Routes>
         <Toaster />
+        <Analytics />
       </BrowserRouter>
     </div>
   );
