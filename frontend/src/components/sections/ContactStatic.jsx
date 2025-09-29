@@ -85,7 +85,7 @@ const ContactStatic = () => {
     const { name, email, subject, message } = formData;
     
     // Create mailto link with form data
-    const mailtoLink = `mailto:$zaid.ansari5127@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(
+    const mailtoLink = `mailto:zaid.ansari5127@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(
       `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`
     )}`;
 
@@ -118,7 +118,7 @@ const ContactStatic = () => {
 
   const handleDirectEmail = () => {
     // Use anchor click for reliability
-    openMailClient(`mailto:$zaid.ansari5127@gmail.com`);
+    openMailClient(`mailto:zaid.ansari5127@gmail.com`);
   };
 
   return (
